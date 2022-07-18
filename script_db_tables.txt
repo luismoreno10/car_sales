@@ -1,0 +1,418 @@
+-- Table: public."Customers"
+-- DROP TABLE public."Customers";
+CREATE TABLE public."Customers"
+(
+ "customer_ID" serial NOT NULL,
+ "cell_Mobile_Phone" numeric,
+ "email_Address" character varying(50) COLLATE pg_catalog."default",
+ "other_Customer_Details" character varying(50) COLLATE pg_catalog."default",
+ CONSTRAINT "Customers_pkey" PRIMARY KEY ("customer_ID"),
+ CONSTRAINT "customer_ID" UNIQUE ("customer_ID")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Customers"
+ OWNER to postgres;
+
+
+
+-- Table: public."Addresses"
+-- DROP TABLE public."Addresses";
+CREATE TABLE public."Addresses"
+(
+ "address_ID" serial NOT NULL,
+ "customer_ID" serial NOT NULL,
+ "address_Line_1" character varying(50) COLLATE pg_catalog."default",
+"address_Line_2" character varying(50) COLLATE pg_catalog."default" NOT
+NULL,
+"address_Line_3" character varying(50) COLLATE pg_catalog."default" NOT
+NULL,
+"address_Line_4" character varying(50) COLLATE pg_catalog."default" NOT
+NULL,
+ town_city character varying(50) COLLATE pg_catalog."default",
+ "state_County_Province" character varying(50) COLLATE pg_catalog."default",
+ "Country" character varying(50) COLLATE pg_catalog."default",
+ "post_Zip_Code" integer,
+"other_Address_Details" character varying(50) COLLATE pg_catalog."default"
+NOT NULL,
+ CONSTRAINT "address_ID" PRIMARY KEY ("address_ID"),
+ CONSTRAINT "customer_ID" FOREIGN KEY ("customer_ID")
+ REFERENCES public."Customers" ("customer_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Addresses"
+ OWNER to postgres;
+
+
+-- Table: public."Car_Features"
+-- DROP TABLE public."Car_Features";
+CREATE TABLE public."Car_Features"
+(
+ "car_Feature_ID" serial NOT NULL,
+ "car_Feature_Description" character varying(50) COLLATE pg_catalog."default",
+ CONSTRAINT "Car_Features_pkey" PRIMARY KEY ("car_Feature_ID"),
+ CONSTRAINT "car_Feature_ID" UNIQUE ("car_Feature_ID")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Car_Features"
+ OWNER to postgres;
+
+
+
+-- Table: public."Car_Models"
+-- DROP TABLE public."Car_Models";
+CREATE TABLE public."Car_Models"
+(
+ "model_Code" serial NOT NULL,
+ manufacturer_code serial,
+ "model_Name" character varying(30) COLLATE pg_catalog."default",
+ CONSTRAINT "Car_Models_pkey" PRIMARY KEY ("model_Code"),
+ CONSTRAINT "model_Code" UNIQUE ("model_Code")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Car_Models"
+ OWNER to postgres;
+
+
+
+-- Table: public."Car_Manufacturers"
+-- DROP TABLE public."Car_Manufacturers";
+CREATE TABLE public."Car_Manufacturers"
+(
+"manufacturer_ShortName" character varying(20) COLLATE pg_catalog."default"
+NOT NULL,
+ "manufacturer_FullName" character varying(40) COLLATE pg_catalog."default",
+"manufacturer_OtherDetails" character varying(65) COLLATE
+pg_catalog."default",
+CONSTRAINT "Car_Manufacturers_pkey" PRIMARY KEY
+("manufacturer_ShortName"),
+ CONSTRAINT "manufacturer_ShortName" UNIQUE ("manufacturer_ShortName")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Car_Manufacturers"
+ OWNER to postgres;
+
+
+
+-- Table: public."Vehicle_Categories"
+-- DROP TABLE public."Vehicle_Categories";
+CREATE TABLE public."Vehicle_Categories"
+(
+ "vehicle_Category_Code" serial NOT NULL,
+"vehicle_Category_Description" character varying(30) COLLATE
+pg_catalog."default",
+CONSTRAINT "Vehicle_Categories_pkey" PRIMARY KEY
+("vehicle_Category_Code"),
+ CONSTRAINT "vehicle_Category_Code" UNIQUE ("vehicle_Category_Code")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Vehicle_Categories"
+ OWNER to postgres;
+
+
+
+-- Table: public."Payment_Status"
+-- DROP TABLE public."Payment_Status";
+CREATE TABLE public."Payment_Status"
+(
+ "payment_Status_Code" serial NOT NULL,
+"payment_Status_Description" character varying(35) COLLATE
+pg_catalog."default",
+CONSTRAINT "Payment_Status_pkey" PRIMARY KEY
+("payment_Status_Code"),
+ CONSTRAINT "payment_Status_Code" UNIQUE ("payment_Status_Code")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Payment_Status"
+ OWNER to postgres;
+
+
+
+ -- Table: public."Finance_Companies"
+-- DROP TABLE public."Finance_Companies";
+CREATE TABLE public."Finance_Companies"
+(
+ "finance_Company_ID" serial NOT NULL,
+ "finance_Company_Name" character varying(40) COLLATE pg_catalog."default",
+ "other_Details" character varying(60) COLLATE pg_catalog."default",
+CONSTRAINT "Finance_Companies_pkey" PRIMARY KEY
+("finance_Company_ID"),
+ CONSTRAINT "finance_Company_ID" UNIQUE ("finance_Company_ID")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Finance_Companies"
+ OWNER to postgres;
+
+
+
+-- Table: public."Cars_for_Sale "
+-- DROP TABLE public."Cars_for_Sale ";
+CREATE TABLE public."Cars_for_Sale "
+(
+ "car_for_Sale_ID" serial NOT NULL,
+ "asking_Price" money,
+ "current_Mileage " integer,
+ "date_Acquired" date,
+ "registration_Year" integer,
+"other_Car_Details" character varying(65) COLLATE pg_catalog."default" NOT
+NULL,
+ "manufacturer_ShortName" character varying(20) COLLATE pg_catalog."default",
+ "model_Code" serial,
+ "vehicle_Category_Code" serial,
+ CONSTRAINT "Cars_for_Sale _pkey" PRIMARY KEY ("car_for_Sale_ID"),
+ CONSTRAINT "car_for_Sale_ID" UNIQUE ("car_for_Sale_ID")
+,
+CONSTRAINT "manufacturer_ShortName" FOREIGN KEY
+("manufacturer_ShortName")
+REFERENCES public."Car_Manufacturers" ("manufacturer_ShortName")
+MATCH SIMPLE
+ ON UPDATE NO ACTION
+ ON DELETE NO ACTION,
+ CONSTRAINT "model_Code" FOREIGN KEY ("model_Code")
+ REFERENCES public."Car_Models" ("model_Code") MATCH SIMPLE
+ ON UPDATE NO ACTION
+ ON DELETE NO ACTION,
+CONSTRAINT "vehicle_Category_Code" FOREIGN KEY
+("vehicle_Category_Code")
+REFERENCES public."Vehicle_Categories" ("vehicle_Category_Code")
+MATCH SIMPLE
+ ON UPDATE NO ACTION
+ ON DELETE NO ACTION
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Cars_for_Sale "
+ OWNER to postgres;
+
+
+
+
+
+
+-- Table: public."features_on_Cars_for_Sale"
+-- DROP TABLE public."features_on_Cars_for_Sale";
+CREATE TABLE public."features_on_Cars_for_Sale"
+(
+ "car_for_sale_ID" serial NOT NULL,
+ "car_Feature_ID" serial NOT NULL,
+CONSTRAINT "features_on_Cars_for_Sale_pkey" PRIMARY KEY
+("car_for_sale_ID", "car_Feature_ID"),
+ CONSTRAINT "car_Feature_ID" FOREIGN KEY ("car_Feature_ID")
+ REFERENCES public."Car_Features" ("car_Feature_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT,
+ CONSTRAINT "car_for_Sale_ID" FOREIGN KEY ("car_for_sale_ID")
+ REFERENCES public."Cars_for_Sale " ("car_for_Sale_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."features_on_Cars_for_Sale"
+ OWNER to postgres;
+ 
+ 
+
+-- Table: public."Cars_Sold"
+-- DROP TABLE public."Cars_Sold";
+CREATE TABLE public."Cars_Sold"
+(
+ "car_Sold_ID" serial NOT NULL,
+ "car_for_Sale_ID" serial,
+ "customer_ID" serial,
+ "agreed_Price" money,
+ "date_Sold" date,
+ "monthly_Payment_Amount" money,
+ "monthly_Payment_Date" integer,
+ "other_Details" character varying(35) COLLATE pg_catalog."default" NOT NULL,
+ CONSTRAINT "car_Sold_ID" PRIMARY KEY ("car_Sold_ID"),
+ CONSTRAINT "car_for_Sale_ID" FOREIGN KEY ("car_for_Sale_ID")
+ REFERENCES public."Cars_for_Sale " ("car_for_Sale_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT,
+ CONSTRAINT "customer_ID" FOREIGN KEY ("customer_ID")
+ REFERENCES public."Customers" ("customer_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Cars_Sold"
+ OWNER to postgres;
+
+-- Table: public."Customer_Payments"
+-- DROP TABLE public."Customer_Payments";
+CREATE TABLE public."Customer_Payments"
+(
+ "customer_Payment_ID" serial NOT NULL,
+ "car_Sold_ID" serial,
+ "customer_ID" serial,
+ "payment_Status_Code" serial,
+ "customer_Payment_Date_Due" date,
+ "customer_Payment_Date_Made" date,
+ "actual_Payment_Amount" money,
+CONSTRAINT "customer_Payment_ID" PRIMARY KEY
+("customer_Payment_ID"),
+ CONSTRAINT "car_Sold_ID" FOREIGN KEY ("car_Sold_ID")
+ REFERENCES public."Cars_Sold" ("car_Sold_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT,
+ CONSTRAINT "customer_ID" FOREIGN KEY ("customer_ID")
+ REFERENCES public."Customers" ("customer_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT,
+CONSTRAINT "payment_Status_Code" FOREIGN KEY
+("payment_Status_Code")
+REFERENCES public."Payment_Status" ("payment_Status_Code") MATCH
+SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Customer_Payments"
+ OWNER to postgres;
+
+
+
+-- Table: public."Car_Loans"
+-- DROP TABLE public."Car_Loans";
+CREATE TABLE public."Car_Loans"
+(
+ "loan_ID" serial NOT NULL,
+ "car_Sold_ID" serial,
+ "finance_Company_ID" serial,
+ "repayment_Start_Date" date,
+ "repayment_End_Date" date,
+ "monthly_Repayments" money,
+ "other_Details" character varying(30) COLLATE pg_catalog."default" NOT NULL,
+ CONSTRAINT "loan_ID" PRIMARY KEY ("loan_ID"),
+ CONSTRAINT "car_Sold_ID" FOREIGN KEY ("car_Sold_ID")
+ REFERENCES public."Cars_Sold" ("car_Sold_ID") MATCH SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT,
+ CONSTRAINT "finance_Company_ID" FOREIGN KEY ("finance_Company_ID")
+REFERENCES public."Finance_Companies" ("finance_Company_ID") MATCH
+SIMPLE
+ ON UPDATE CASCADE
+ ON DELETE RESTRICT
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Car_Loans"
+ OWNER to postgres;
+
+
+
+ -- Table: public."Insurance_Companies"
+-- DROP TABLE public."Insurance_Companies";
+CREATE TABLE public."Insurance_Companies"
+(
+ "Insurance_Company_ID" serial NOT NULL,
+"insurance_Company_Name" character varying(40) COLLATE
+pg_catalog."default",
+ "other_Details" character varying(50) COLLATE pg_catalog."default",
+CONSTRAINT "Insurance_Companies_pkey" PRIMARY KEY
+("Insurance_Company_ID"),
+ CONSTRAINT "insurance_Company_ID" UNIQUE ("Insurance_Company_ID")
+)
+WITH (
+ OIDS = FALSE
+)
+TABLESPACE pg_default;
+ALTER TABLE public."Insurance_Companies"
+ OWNER to postgres;
+
+
+
+CREATE TABLE public."Customer_Preferences"
+(
+    "customer_Preference_ID" serial not null,
+    "car_Feature_ID" serial,
+    "customer_ID" serial,
+    "customer_Preference_Details" character varying(50) NOT NULL,
+    PRIMARY KEY ("customer_Preference_ID"),
+    CONSTRAINT "car_Feature_ID" FOREIGN KEY ("car_Feature_ID")
+        REFERENCES public."Car_Features" ("car_Feature_ID") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT "customer_ID" FOREIGN KEY ("customer_ID")
+        REFERENCES public."Customers" ("customer_ID") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE public."Customer_Preferences"
+    OWNER to postgres;
+
+
+
+-- Table: public."Insurance_Policies"
+
+-- DROP TABLE public."Insurance_Policies";
+
+CREATE TABLE public."Insurance_Policies"
+(
+    "policy_ID" serial  NOT NULL,
+    "car_Sold_ID" serial,
+    "insurance_Company_ID" serial,
+    "policy_Start_date" date,
+    "policy_Renewal_Date" date,
+    "monthly_Payments" money,
+    "other_Details" character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT "Insurance_Policies_pkey" PRIMARY KEY ("policy_ID"),
+    CONSTRAINT "car_Sold_ID" FOREIGN KEY ("car_Sold_ID")
+        REFERENCES public."Cars_Sold" ("car_Sold_ID") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT "insurance_Company_ID" FOREIGN KEY ("insurance_Company_ID")
+        REFERENCES public."Insurance_Companies" ("Insurance_Company_ID") MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public."Insurance_Policies"
+    OWNER to postgres;
+
